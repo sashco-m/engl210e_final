@@ -1,11 +1,12 @@
 
 # A very simple Flask Hello World app for you to get started with...
 import sqlite3
+import os
 from flask import Flask, g
 
 app = Flask(__name__)
 
-DATABASE = './dbs/test.db'
+DATABASE = os.environ['BASE_PATH'] + '/dbs/test.db'
 
 
 def query_db(query, args = (), one = False):
@@ -38,6 +39,8 @@ def init_db():
 @app.route('/')
 def hello_world():
     query_db("insert into Test values(1,'bruh')")
+    ret = ""
     for x in query_db("select * from test"):
-        print(f"{x['ID']} and {x['Msg']}")
-    return 'Work in progess: ENGL210E final project'
+        ret += f"{x['ID']} and {x['Msg']}"
+    # return 'Work in progess: ENGL210E final project'
+    return ret
