@@ -6,7 +6,7 @@ from flask import Flask, g
 
 app = Flask(__name__)
 
-DATABASE = os.getenv('BASE_PATH') + '/dbs/test.db'
+DATABASE = os.getenv('PWD') + '/dbs/test.db'
 
 
 def query_db(query, args = (), one = False):
