@@ -60,7 +60,7 @@ def init_token_db():
 
         # add tokens
         # TODO hash them
-        tokens = json.loads(open('tokens.json'))
+        tokens = json.load(open('tokens.json'))
         for t in tokens:
             db.execute(f"insert into Tokens(TOKEN) values ({t})")
         db.commit()
