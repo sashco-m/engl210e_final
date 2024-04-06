@@ -6,8 +6,7 @@ from flask import Flask, g
 
 app = Flask(__name__)
 
-#TOKEN_DB = os.getenv('PWD') + '/dbs/token.db'
-TOKEN_DB = 'dbs/token.db'
+TOKEN_DB = os.getenv('PWD') + '/dbs/token.db'
 USER_DB = None
 
 def query_token_db(query, args = (), one = False):
