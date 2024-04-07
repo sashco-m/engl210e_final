@@ -31,7 +31,9 @@ def init_token_db():
         tokens = json.load(f)
         for t in tokens:
             hashed_token = generate_password_hash(t) 
-            db.execute(f'insert into Tokens(TOKEN) values ("{hashed_token}")')
+            db.execute(f'insert into Tokens (token) values ("{hashed_token}")')
+
+    db.commit()    
 
 
 @click.command('init-db')
