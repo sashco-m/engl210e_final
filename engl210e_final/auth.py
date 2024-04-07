@@ -5,7 +5,7 @@ from flask import (
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from ENGL210E_FINAL.db import get_token_db
+from engl210e_final.db import get_token_db
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
