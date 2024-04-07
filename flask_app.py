@@ -65,6 +65,11 @@ def init_token_db():
         db.commit()
         print('here')
     
+# idea -> any route without ?token querystring gets redirected to login
+# login simply checks if the token exists inthe DB, if so redirect to
+#   / with ?token={token}
+# every page will check for ?token as auth
+
 @app.route('/')
 def hello_world():
     ret = ""
