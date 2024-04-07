@@ -7,7 +7,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from engl210e_final.db import get_token_db
 
-bp = Blueprint('auth', __name__, url_prefix='/auth')
+bp = Blueprint('auth', __name__, url_prefix='/')
 
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
@@ -16,10 +16,12 @@ def login():
         db = get_token_db()
         error = None
 
-        hashed_token = generate_password_hash(token)
-        result = db.execute(
-            'select * from Tokens where token = ?', (hashed_token,)
-        ).fetchone()
+        rows = db.execute('select * from Tokens').fetchall()
+        result = None
+        for row in rows:
+            if check_password_hash(row['token'], token):
+                result = row
+                break
 
         if result is None:
             error = 'Incorrect token.'
@@ -31,7 +33,7 @@ def login():
 
         flash(error)
 
-    return render_template('auth/login.html')
+    return render_template('login.html')
 
 @bp.before_app_request
 def load_logged_in_user():
