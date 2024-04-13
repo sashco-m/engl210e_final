@@ -5,12 +5,15 @@ from flask import (
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from engl210e_final.db import get_token_db
+from engl210e_final.db import get_token_db, init_user_db
 
 bp = Blueprint('auth', __name__, url_prefix='/')
 
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
+    if g.user is not None:
+        return redirect(url_for('index'))
+    
     if request.method == 'POST':
         token = request.form['token']
         db = get_token_db()
@@ -29,6 +32,8 @@ def login():
         if error is None:
             session.clear()
             session['user_id'] = result['id']
+            # create user db
+            init_user_db(result['token']) 
             return redirect(url_for('index'))
 
         flash(error)
