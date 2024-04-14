@@ -16,6 +16,14 @@ def get_token_db():
 
     return g.token_db
 
+def incr_step():
+    if 'user' not in g:
+        raise 'no user'
+
+    db = get_token_db()
+    db.execute(f'update Tokens set step = step + 1 where id = {g.user["id"]}')
+    db.commit()
+
 def get_user_db(token):
     if 'user_db' not in g:
         g.user_db = sqlite3.connect(

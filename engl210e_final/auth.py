@@ -34,7 +34,7 @@ def login():
             session['user_id'] = result['id']
             # create user db
             init_user_db(result['token']) 
-            return redirect(url_for('index'))
+            return redirect(url_for('ethics'))
 
         flash(error)
 

@@ -5,6 +5,9 @@
 {% endblock %}
 
 {% block content %}
+  {% for message in get_flashed_messages() %}
+    <div class="flash">{{ message }}</div>
+  {% endfor %}
   <form method="post">
     <label for="token">Token</label>
     <input name="token" id="token" required>

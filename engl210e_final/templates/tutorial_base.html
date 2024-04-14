@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Tutorial{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<div class="panel-container">
+    <div class="instruction-panel">
+        {% block instructions %}{% endblock %}
+    </div>
+    <div class="main-panel">
+        <h1>Welcome to a vulnerable website!</h1>
+        <form method="post">
+            <input name="username" placeholder="username" required>
+            <input name="password" placeholder="password" required>
+            <input type="submit" value="Log In">
+        </form>
+        {% for message in get_flashed_messages() %}
+            <div class="flash">{{ message }}</div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
