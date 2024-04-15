@@ -1,7 +1,6 @@
 .instruction-panel {
     padding: 20px;
     width: 50%;
-    height: 100vh;
     background-color: #eee; 
     border: 1px solid lightgray;
     border-radius: 5px;
@@ -9,8 +8,6 @@
 .main-panel {
     padding: 20px;
     width: 50%;
-    height: 100%;
-    /*background-color: #eee;*/
     border: 1px solid lightgray;
     border-radius: 5px;
     text-align: center;
@@ -19,8 +16,16 @@
     margin-top: 1rem;
     display: flex;
     flex-direction: row;
-    height:100vh;
     gap: 5px; 
+}
+
+.success {
+    background-color: #abcea9 !important;
+    border: 1px solid #6eaa6b !important;
+}
+
+.next-button {
+    align-self: end !important;
 }
 
 /* default */
@@ -35,14 +40,9 @@ nav h1 a { text-decoration: none; padding: 0.25rem 0.5rem; }
 nav ul  { display: flex; list-style: none; margin: 0; padding: 0; }
 nav ul li a, nav ul li span, header .action { display: block; padding: 0.5rem; }
 .content { padding: 0 1rem 1rem; }
-.content > header { border-bottom: 1px solid lightgray; display: flex; align-items: flex-end; }
+.content > header { border-bottom: 1px solid lightgray; display: flex; align-items: flex-end; margin-bottom: 1rem; }
 .content > header h1 { flex: auto; margin: 1rem 0 0.25rem 0; }
 .flash { margin: 1em 0; padding: 1em; background: #cae6f6; border: 1px solid #377ba8; }
-.post > header { display: flex; align-items: flex-end; font-size: 0.85em; }
-.post > header > div:first-of-type { flex: auto; }
-.post > header h1 { font-size: 1.5em; margin-bottom: 0; }
-.post .about { color: slategray; font-style: italic; }
-.post .body { white-space: pre-line; }
 .content:last-child { margin-bottom: 0; }
 .content form { margin: 1em 0; display: flex; flex-direction: column; }
 .content label { font-weight: bold; margin-bottom: 0.5em; }

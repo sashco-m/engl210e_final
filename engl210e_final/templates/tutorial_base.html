@@ -8,17 +8,26 @@
 <div class="panel-container">
     <div class="instruction-panel">
         {% block instructions %}{% endblock %}
+        <form method="post">
+            <input type="hidden" name="type" value="next" required>
+            <input class="next-button" type="submit" value="Log In">
+        </form>
     </div>
     <div class="main-panel">
         <h1>Welcome to a vulnerable website!</h1>
         <form method="post">
+            <input type="hidden" name="type" value="login" required>
             <input name="username" placeholder="username" required>
             <input name="password" placeholder="password" required>
             <input type="submit" value="Log In">
         </form>
-        {% for message in get_flashed_messages() %}
-            <div class="flash">{{ message }}</div>
-        {% endfor %}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="flash {{ 'success' if category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
     </div>
 </div>
 {% endblock %}

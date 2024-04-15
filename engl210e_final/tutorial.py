@@ -9,41 +9,46 @@ from engl210e_final.db import init_user_db, get_user_db, incr_step, get_token_db
 
 bp = Blueprint('tutorial', __name__)
 
-# pages for
-# - ethics statement
-# - main text / login screen
-
-# probably just return a page with a big blob of text that can be cycled through
-# successfully performing the injection can lead to another page idk
-# be sure to wrap the hell out of the input with try-except
-
-@bp.route('/', methods=('GET', 'POST'))
+@bp.route('/', methods=['GET'])
 @login_required
 def index():
     step = g.user['step']
+    return render_template(f'sections/{step}.html')
 
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        db = get_user_db(g.user['token'])
-        error = None
+@bp.route('/', methods=['POST'])
+@login_required
+def dummy_login():
+    step = g.user['step']
+    req_type = request.form['type']
+
+    if req_type == "next":
+        incr_step()
+        return render_template(f'sections/{step + 1}.html')
+
+    username = request.form['username']
+    password = request.form['password']
+    db = get_user_db(g.user['token'])
+
+    error = None
+    # intentional SQL injection
+    # try/catch sql errors
+    try:
         dummy_user = db.execute(
-            'SELECT * FROM Users WHERE username = ?', (username,)
+            f'SELECT * FROM Users WHERE username = "{username}" and password = "{password}"'
         ).fetchone()
 
         if dummy_user is None:
-            error = 'Incorrect username.'
-        elif dummy_user['password'] != password:
-            error = 'Incorrect password.'
+            error = 'Incorrect username/password.'
+    except:
+        error = "Invalid SQL Query"
 
-        if error is None:
-           # progress the tutorial
-           incr_step()
-           return render_template(f'sections/{step + 1}.html')
-
-        flash(error)
+    if error is None:
+       flash("Success!", True) 
+    else:
+       flash(error, False)
 
     return render_template(f'sections/{step}.html')
+
 
 @bp.route('/ethics', methods=('GET', 'POST'))
 @login_required
@@ -65,5 +70,7 @@ def reset():
     db = get_token_db()
     db.execute(f'update Tokens set step = 1 where id = {g.user["id"]}')
     db.commit()
+
+    init_user_db(g.user['token']) 
 
     return redirect(url_for('index'))

@@ -4,7 +4,7 @@ drop table if exists Audit;
 CREATE TABLE Tokens(
     id integer primary key,
     token varchar(255),
-    step integer default 0 not null
+    step integer default 1 not null
 );
 
 CREATE TABLE Audit(
