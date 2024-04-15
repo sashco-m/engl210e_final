@@ -28,6 +28,13 @@
     align-self: end !important;
 }
 
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin: 1rem 1rem;
+    gap: 1rem;
+}
+
 /* default */
 html { font-family: sans-serif; background: #eee; padding: 1rem; }
 body { max-width:80%; margin: 0 auto; background: white; border-radius: 0px 0px 5px 5px; }
