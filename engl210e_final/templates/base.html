@@ -2,7 +2,7 @@
 <title>{% block title %}{% endblock %} - Sashco's ENGL 210E Final</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <nav>
-  <h1>Sashco's ENGL 210E Final</h1>
+  <h1>Web Security Workshop (Sashco's ENGL 210E Final)</h1>
   <ul>
     {% if g.user %}
       <li><a href="{{ url_for('tutorial.reset') }}">Reset Progress</a>

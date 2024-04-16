@@ -4,19 +4,271 @@
 <div>
     <h3>About Me</h3>
     <p>
-       todo 
+        Welcome! I’m Sashco, a 4th-year undergraduate studying Computer Science at the University of Waterloo.
+        I particularly enjoy software security, which I’ve encountered many times in both my internships and my coursework.
     </p>
+    <p>
+        One of the most important things I’ve learned is that to write secure software, you have to think like an attacker.
+        I run a blog at <a href="https://mistelbacher.ca" target="_blank">https://mistelbacher.ca</a> where I talk about life and tech.
+        I hope you enjoy this hands-on cybersecurity workshop! 
+    </p>
+    <p>Catalogue of my experience:</p>
+    <ul class="experience-list">
+        <li>
+            2021 - Backend developer at an early-stage startup called Lean Payments.
+            I wrote an authorization system for their API to enforce that a user has the correct permissions for any action.
+        </li>
+        <li>2022 - Backend developer at a network management startup called Auvik Networks.</li>
+        <li>2023 - Web developer at an education-technology startup called Top Hat.</li>
+        <li>2023 - Took CS458 Computer Security and Privacy, really enjoyed it!</li>
+        <li>2023 - Web developer at a financial-tech startup called Super.com.</li>
+        <li>2024 - Will be working at an AI-powered risk modeling startup called Federato</li>
+    </ul>
 </div>
 <div>
-    <h3>Goals</h3>
+    <h3>Motivation</h3>
     <p>
-       todo 
+        On May 31, 2023, the MOVEit filetransfer application, trusted by 1000’s of businesses worldwide, was found to have a vulnerability that allowed attackers to access the an organization's entire file system [1]. 
+        One of the organizations targetted was Ontario's government birth registry, where it was used to expose the personal health information of over 3.4 million people [2].
+        A larger proportion of our lives are taking place in online spaces. 
+        Understanding the basics of web security is critical for any new developers to protect the privacy and earn the trust of our users. 
+        It is equally important for the average user so they are aware of the risks that come with this digital transition. 
     </p> 
+    <p>
+        This attack was made possible by a “SQL injection” vulnerability. 
+        We will learn exactly what this means in this workshop, and you will apply this knowledge by trying it out in our simulated environment.
+    </p>
+    <table>
+        <tr>
+            <td>[1]</td>
+            <td>Unit, “Threat Brief - MOVEit transfer SQL injection vulnerabilities: CVE-2023-34362, CVE-2023-35036 and CVE-2023-35708 (Updated Oct 4),” Unit 42, Oct. 04, 2023. https://unit42.paloaltonetworks.com/threat-brief-moveit-cve-2023-34362/</td>
+        </tr>
+        <tr>
+            <td>[2]</td>
+            <td>M. Kapko, “MOVEit mass exploit timeline: How the file-transfer service attacks entangled victims,” Cybersecurity Dive, Dec. 08, 2023. [Online]. Available: https://www.cybersecuritydive.com/news/moveit-breach-timeline/687417/</td>
+        </tr>
+    </table> 
 </div>
 <div>
     <h3>Your Workbench</h3>
     <p>
-       todo 
+        The left-hand panel contains instructions and prompts. Clicking “Previous” and “Next” cycles between instructions. 
+        Your progress is automatically saved. 
+        The right-hand panel contains the dummy login screen that we will be exploiting.
     </p> 
+    <p>"Reset Progress", located at the upper right-hand corner, will reset your environment if you would like to start fresh.</p>
+    <p>
+        Below the login screen, a blue info box indicates an unsuccessful login attempt, while a green info box indicates a successful login attempt.
+    </p>
+    <p>
+        Feel free to try the login screen and get comfortable with it. 
+        You can use any username/password combination to see the failure popup, or user the built-in dummy user <strong>Alice/abc123</strong> to see the success popup.
+    </p>
+    <p>
+        In order to understand SQL injection, we need a crash course on how web applications work.
+    </p>
+</div>
+<div>
+    <h3>What is a Web Application?</h3>
+    <p>
+        When you visit a website, you are sent a file from a computer (called a <strong>webserver</strong>) that your browser understands how to display [1].
+    </p>
+    <figure>
+        <img src="{{ url_for('static', filename='diagrams-static-site-background.png') }}" />
+        <figcaption>Source: created myself with diagrams.net</figcaption>
+    </figure>
+    <p>
+        However, the internet would be a very boring place if everyone was sent the same version of every website.
+        We would like to make it <strong>dynamic</strong>, where the file sent is modified based on who is requesting it.
+    </p>
+    <p>
+        In order to be dynamic, the webserver needs to keep track of some information.
+        This information is called <strong>state</strong>. 
+        For example, for this website, it keeps track of each user (access token) and how far they have progressed in the tutorial.
+    </p>
+    <p>The webserver stores state using a <strong>database</strong>.</p>
+    <table>
+        <tr>
+            <td>[1]</td>
+            <td>“What is a web server? - Learn web development | MDN,” MDN Web Docs, Jul. 03, 2023. https://developer.mozilla.org/en-US/docs/Learn/Common_questions/Web_mechanics/What_is_a_web_server</td>
+        </tr>
+    </table> 
+</div>
+<div>
+    <h3>What is a Database?</h3>
+    <p>
+        Think of a database like a Microsoft Excel sheet that the webserver is really good at quickly accessing.
+    </p>
+    <p>
+        Here is what our diagram might look like now:
+    </p>
+    <figure>
+        <img src="{{ url_for('static', filename='diagrams-static-site-db-background.png') }}" />
+        <figcaption>Source: created myself with diagrams.net</figcaption>
+    </figure>
+    <p>
+        For example, the database for this website is simply a file that the computer can easily access and update in a secure way [1].
+    </p>
+    <p> 
+        Most databases, including this one, are <strong>queried</strong> (information is looked up, added, updated, or deleted) using a programming language called <strong>SQL</strong> (Structured Query Language).
+    </p>
+    <table>
+        <tr>
+            <td>[1]</td>
+            <td>“SQLite Documentation.” https://www.sqlite.org/docs.html</td>
+        </tr>
+    </table> 
+</div>
+<div>
+    <h3>What is SQL?</h3>
+    <p>
+        SQL allows us to manipulate the data in the database.
+        This tutorial is not about learning SQL, but we will need to understand the basics.
+        SQL data is stored in a <strong>table</strong>, consisting of rows and columns [1].
+    </p>
+    <figure>
+        <img src="{{ url_for('static', filename='diagrams-sql-table.png') }}" />
+        <figcaption>Source: created myself with diagrams.net</figcaption>
+    </figure>
+    <p>
+        The most basic instruction is <strong>SELECT</strong>. 
+        It is used to select a row from the database.
+        After the SELECT keyword, we need to specify which columns to get.
+        The special value <strong>*</strong> means "return the entire row".
+    </p>
+    <p>
+        We also need to specify the table.
+        Suppose we have a table of users called User.
+        We can SELECT from it by appending <strong>FROM User</strong> to our query.
+    </p>
+    <p>
+        Finally, we have the instruction <strong>SELECT * FROM User</strong>.
+        This gives us the entire table.
+        We can narrow down the rows returned by requiring a column to have a specific value.
+        Suppose we only want rows where the "username" column has the value "Alice". 
+        Then our instruction becomes:
+    </p>
+    <p>
+        <strong>SELECT * FROM User WHERE username = "Alice"</strong>
+    </p>
+    <p> 
+        Of course, other keywords like <strong>DELETE</strong> or <strong>UPDATE</strong> follow the same pattern.
+    </p>
+    <p>
+        We will conclude with a special note about comments. 
+        In almost every programming language, there is a special symbol that means "ignore this text". 
+        It is used for programmers to leave messages and comments inside the code. 
+        In SQL, this is done with <strong>--</strong>.
+        So for example, in the query <strong>SELECT * FROM User -- WHERE username = "Alice"</strong>, the condition at the end is ignored by the database.
+    </p>
+    <table>
+        <tr>
+            <td>[1]</td>
+            <td>“What is SQL? - Structured Query Language (SQL) Explained - AWS,” Amazon Web Services, Inc. https://aws.amazon.com/what-is/sql/</td>
+        </tr>
+    </table> 
+</div>
+<div>
+    <h3>SQL Injection</h3>
+    <p>
+        That was a lot of information!
+        To summarize, we have that:
+    </p>
+   <p>We want dynamic websites -> webserver need to store state -> uses a database -> database takes SQL queries</p> 
+   <p>
+        So what's the issue? 
+    </p>
+    <p>
+        Problems happen when <strong>user input</strong> is mixed in with these queries.
+        Sometimes we want that to happen.
+        For example, if a user asks YouTube for videos of cats, we need to include "cats" in our query of the video database.
+        However, what if the user instead put SQL commands in their input?
+        Well, the database is <strong>unable</strong> to differentiate between the commands we give it and commands that come from the user.
+        This is the root cause of <strong>SQL Injection</strong>, where user input is directly inserted into the SQL query that the database will carry out.
+    </p>
+    <p>
+        We will see this in action in the next section!
+    </p>
+</div>
+<div>
+    <h3>First Attack - Comments: Introduction</h3>
+    <p>
+        This login is vulnerable to SQL injection.
+        That is, the username and password input is directly inserted into an SQL query.
+    </p>
+    <p>
+        Why is this a big deal?
+        Well, as an attacker, we can make some guesses about how this SQL query used in the login is going to look like.
+        A naive developer may have written something like:
+    </p>
+    <p>
+        <strong>SELECT * FROM User WHERE name = "{username}" AND password = "{password}"</strong>
+    </p>
+    <p>
+        Where {username} and {password} come directly from the input on the right.
+        If the database returns a row, the webserver knows that username/password combination exists and it can consider that user logged in.
+    </p>
+    <p>
+        Now, suppose we know Alice is a user of this website.
+        However, she has a strong password that we do not know.
+        Is there anything we can put in place of the username and password to make the database ignore the password condition? (hint: comments!)
+    </p>
+</div>
+<div>
+    <h3>First Attack - Comments: Solution</h3>
+    <p>
+        Well, we want to access Alice's account.
+        However, what if we set the username as:
+    </p>    
+    <p><strong>Alice" --</strong></p>
+    <p>
+        The resulting query looks like:
+    </p>
+    <p><strong>SELECT * FROM User WHERE name = "Alice" --" AND password = "{password}";</strong></p>
+    <p>
+        Remember: we ignore everything after the --.
+        So, this simply selects and row with the name Alice, regardless of the password [1]!
+    </p>
+    <p>
+        Feel free to give this username a try with any password, and move forward once you've gotten it working.
+    </p>
+    <p><strong>Username: </strong><input id="u1" type="text" value='Alice" --' disabled><button onclick="copy('u1')">Copy</button></p>
+    <table>
+        <tr>
+            <td>[1]</td>
+            <td>D. Barradas, Class Lecture, Topic: “Computer Security and Privacy” CS 458, Faculty of Mathematics, University of Waterloo, Waterloo, May 2023</td>
+        </tr>
+    </table> 
+    <script>
+    const copy = (id) => {
+        let copyText = document.getElementById(id)
+        copyText.select();
+        navigator.clipboard.writeText(copyText.value);
+    } 
+    </script>
+</div>
+<div>
+    <h3>Second Attack - 1=1: Introduction</h3>
+    <p>
+       todo 
+    </p>
+</div>
+<div>
+    <h3>Second Attack - 1=1: Solution</h3>
+    <p>
+        todo
+    </p>
+</div>
+<div>
+    <h3>How to mitigate?</h3>
+    <p>
+        todo
+    </p>
+</div>
+<div>
+    <h3>Thanks!</h3>
+    <p>
+        todo
+    </p>
 </div>
 {% endblock %}

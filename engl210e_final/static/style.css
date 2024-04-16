@@ -43,6 +43,25 @@
     color: #3DDC97;
 }
 
+p {
+    font-size: 1em;
+    line-height: calc(1ex / 0.32);
+}
+
+td {
+    vertical-align: top;
+}
+
+table {
+    border-spacing: 10px
+}
+
+.experience-list{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 /* default */
 html { font-family: sans-serif; background: #eee; padding: 1rem; }
 body { max-width:80%; margin: 0 auto; background: white; border-radius: 0px 0px 5px 5px; }
