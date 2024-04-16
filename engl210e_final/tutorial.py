@@ -1,29 +1,24 @@
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, url_for
+    Blueprint, flash, g, redirect, render_template, request, url_for, Response
 )
 from werkzeug.exceptions import abort
 
 from engl210e_final.auth import login_required
 
-from engl210e_final.db import init_user_db, get_user_db, incr_step, get_token_db
+from engl210e_final.db import init_user_db, get_user_db, incr_step, decr_step, get_token_db
 
 bp = Blueprint('tutorial', __name__)
 
 @bp.route('/', methods=['GET'])
 @login_required
 def index():
-    step = g.user['step']
-    return render_template(f'sections/{step}.html')
+    return render_template('tutorial.html', step=g.user['step'])
 
 @bp.route('/', methods=['POST'])
 @login_required
 def dummy_login():
+    # last step stored in DB
     step = g.user['step']
-    req_type = request.form['type']
-
-    if req_type == "next":
-        incr_step()
-        return render_template(f'sections/{step + 1}.html')
 
     username = request.form['username']
     password = request.form['password']
@@ -47,8 +42,19 @@ def dummy_login():
     else:
        flash(error, False)
 
-    return render_template(f'sections/{step}.html')
+    return render_template('tutorial.html', step=step)
 
+@bp.route('/next-step', methods=['POST'])
+@login_required
+def next():
+    incr_step()
+    return Response()
+
+@bp.route('/prev-step', methods=['POST'])
+@login_required
+def prev():
+    decr_step()
+    return Response()
 
 @bp.route('/ethics', methods=('GET', 'POST'))
 @login_required

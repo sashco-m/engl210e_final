@@ -35,10 +35,19 @@
     gap: 1rem;
 }
 
+.sql-keyword {
+    color: #EF6461;
+}
+
+.sql-string {
+    color: #3DDC97;
+}
+
 /* default */
 html { font-family: sans-serif; background: #eee; padding: 1rem; }
 body { max-width:80%; margin: 0 auto; background: white; border-radius: 0px 0px 5px 5px; }
 h1 { font-family: serif; color: #377ba8; margin: 1rem 0; }
+h3 { font-family: serif; color: #377ba8; margin: 0; }
 a { color: #377ba8; }
 hr { border: none; border-top: 1px solid lightgray; }
 nav { background: lightgray; display: flex; align-items: center; padding: 0 0.5rem; border-radius: 5px 5px 0px 0px; }

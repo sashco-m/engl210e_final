@@ -7,16 +7,21 @@
 {% block content %}
 <div class="panel-container">
     <div class="instruction-panel">
-        {% block instructions %}{% endblock %}
-        <form method="post">
-            <input type="hidden" name="type" value="next" required>
-            <input class="next-button" type="submit" value="Log In">
-        </form>
+        <div>
+            <div class="text-container">
+                {% block text %}{% endblock %}
+            </div>
+            <div class="pagination">
+                <a href="#" onclick="prev()">Previous</a>
+                <span class="page-num">0/0</span>
+                <a href="#" onclick="next()">Next</a>
+            </div>
+        </div>
     </div>
     <div class="main-panel">
         <h1>Welcome to a vulnerable website!</h1>
         <form method="post">
-            <input type="hidden" name="type" value="login" required>
+            <input type="hidden" name="step" value="1" required>
             <input name="username" placeholder="username" required>
             <input name="password" placeholder="password" required>
             <input type="submit" value="Log In">
@@ -30,4 +35,46 @@
         {% endwith %}
     </div>
 </div>
+
+<script>
+// setup pagenum
+pageCounter = document.getElementsByClassName('page-num')[0]
+container = document.getElementsByClassName("text-container")[0]
+total = container.childElementCount
+// given default step (ignore error)
+// NOTE: 1-indexed everywhere
+// include a min in case that step is messed up
+current = Math.min({{ step }}, total)
+pageCounter.innerHTML = current + "/" + total
+// set others to invisible
+for(let c of container.children){
+    c.style.display = "none"
+}
+container.children[0].style.display = "block"
+
+const prev = () => {
+    if(current == 1)
+       return 
+
+    container.children[current - 1].style.display = "none"
+    current -= 1
+    container.children[current - 1].style.display = "block"
+    pageCounter.innerHTML = current + "/" + total
+
+    // update in server
+    fetch("/prev-step", {method: "POST"})
+}
+const next = () => {
+    if(current == total)
+       return 
+
+    container.children[current - 1].style.display = "none"
+    current += 1
+    container.children[current - 1].style.display = "block"
+    pageCounter.innerHTML = current + "/" + total
+
+    // update in server
+    fetch("/next-step", {method: "POST"})
+}
+</script>
 {% endblock %}

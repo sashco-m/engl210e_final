@@ -16,12 +16,24 @@ def get_token_db():
 
     return g.token_db
 
+# careful - bounds not enforced
 def incr_step():
     if 'user' not in g:
         raise 'no user'
 
     db = get_token_db()
     db.execute(f'update Tokens set step = step + 1 where id = {g.user["id"]}')
+    db.commit()
+
+def decr_step():
+    if 'user' not in g:
+        raise 'no user'
+    
+    if g.user['step'] == 1:
+        raise 'step below 1'
+
+    db = get_token_db()
+    db.execute(f'update Tokens set step = step - 1 where id = {g.user["id"]}')
     db.commit()
 
 def get_user_db(token):
