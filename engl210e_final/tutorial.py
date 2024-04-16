@@ -25,6 +25,7 @@ def dummy_login():
     db = get_user_db(g.user['token'])
 
     error = None
+    dummy_user = None
     # intentional SQL injection
     # try/catch sql errors
     try:
@@ -38,7 +39,7 @@ def dummy_login():
         error = "Invalid SQL Query"
 
     if error is None:
-       flash("Success!", True) 
+       flash(f"Success! Welcome, {dummy_user['username']}", True) 
     else:
        flash(error, False)
 

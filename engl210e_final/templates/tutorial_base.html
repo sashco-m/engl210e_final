@@ -50,7 +50,7 @@ pageCounter.innerHTML = current + "/" + total
 for(let c of container.children){
     c.style.display = "none"
 }
-container.children[0].style.display = "block"
+container.children[current - 1].style.display = "block"
 
 const prev = () => {
     if(current == 1)
