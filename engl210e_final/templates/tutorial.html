@@ -9,7 +9,7 @@
     </p>
     <p>
         One of the most important things I’ve learned is that to write secure software, you have to think like an attacker.
-        I run a blog at <a href="https://mistelbacher.ca" target="_blank">https://mistelbacher.ca</a> where I talk about life and tech.
+        It's made me take a more active role in maintaining my privacy and improving the security of the code I write.
         I hope you enjoy this hands-on cybersecurity workshop! 
     </p>
     <p>Catalogue of my experience:</p>
@@ -28,11 +28,11 @@
 <div>
     <h3>Motivation</h3>
     <p>
-        On May 31, 2023, the MOVEit filetransfer application, trusted by 1000’s of businesses worldwide, was found to have a vulnerability that allowed attackers to access the an organization's entire file system [1]. 
+        On May 31, 2023, the MOVEit filetransfer application, trusted by 1000’s of businesses worldwide, was found to have a vulnerability that allowed attackers to access entire file systems [1]. 
         One of the organizations targetted was Ontario's government birth registry, where it was used to expose the personal health information of over 3.4 million people [2].
         A larger proportion of our lives are taking place in online spaces. 
         Understanding the basics of web security is critical for any new developers to protect the privacy and earn the trust of our users. 
-        It is equally important for the average user so they are aware of the risks that come with this digital transition. 
+        It is equally important for the average user so they are aware of the risks that come with this digital transition, and learn how to maximize their privacy.
     </p> 
     <p>
         This attack was made possible by a “SQL injection” vulnerability. 
@@ -56,13 +56,13 @@
         Your progress is automatically saved. 
         The right-hand panel contains the dummy login screen that we will be exploiting.
     </p> 
-    <p>"Reset Progress", located at the upper right-hand corner, will reset your environment if you would like to start fresh.</p>
+    <p>"Reset Progress", located at the upper right-hand corner, will reset your environment if you would like to restart.</p>
     <p>
         Below the login screen, a blue info box indicates an unsuccessful login attempt, while a green info box indicates a successful login attempt.
     </p>
     <p>
-        Feel free to try the login screen and get comfortable with it. 
-        You can use any username/password combination to see the failure popup, or user the built-in dummy user <strong>Alice/abc123</strong> to see the success popup.
+        Try the login screen and get comfortable with it. 
+        You can use any username/password combination to see the failure popup, or use the built-in dummy user <strong>Alice/abc123</strong> to see the success popup.
     </p>
     <p>
         In order to understand SQL injection, we need a crash course on how web applications work.
@@ -80,19 +80,18 @@
     </figure>
     <p>
         However, the internet would be a very boring place if everyone was sent the same version of every website.
-        We would like to make it <strong>dynamic</strong>, where the file sent is modified based on who is requesting it.
+        We would like to make it <strong>dynamic</strong>, where the file being sent is modified based on who is requesting it.
     </p>
     <p>
         In order to be dynamic, the webserver needs to keep track of some information.
         This information is called <strong>state</strong>. 
-        For example, for this website, it keeps track of each user (access token) and how far they have progressed in the tutorial.
+        For example, this website keeps track of each user (access token) and how far they have progressed in the tutorial.
     </p>
     <p>The webserver stores state using a <strong>database</strong>.</p>
     <table>
         <tr>
             <td>[1]</td>
             <td>“What is a web server? - Learn web development | MDN,” MDN Web Docs, Jul. 03, 2023. https://developer.mozilla.org/en-US/docs/Learn/Common_questions/Web_mechanics/What_is_a_web_server</td>
-            <td> </td>S. Mistelbacher, Web Server Architecture. 2023.
         </tr>
     </table> 
 </div>
@@ -110,7 +109,7 @@
         <figcaption>Source: Primary</figcaption>
     </figure>
     <p>
-        For example, the database for this website is simply a file that the computer can easily access and update in a secure way [1].
+        For example, the database for this website is a file that the computer can easily access and update in a secure way [1].
     </p>
     <p> 
         Most databases, including this one, are <strong>queried</strong> (information is looked up, added, updated, or deleted) using a programming language called <strong>SQL</strong> (Structured Query Language).
@@ -158,8 +157,7 @@
     </p>
     <p>
         We will conclude with a special note about comments. 
-        In almost every programming language, there is a special symbol that means "ignore this text". 
-        It is used for programmers to leave messages and comments inside the code. 
+        In almost every programming language, there is a special symbol that means "ignore the text after this symbol". 
         In SQL, this is done with <strong>--</strong>.
         So for example, in the query <strong>SELECT * FROM User -- WHERE username = "Alice"</strong>, the condition at the end is ignored by the database.
     </p>
@@ -200,7 +198,7 @@
     </p>
     <p>
         Why is this a big deal?
-        Well, as an attacker, we can make some guesses about how this SQL query used in the login is going to look like.
+        Well, as an attacker, we can make some guesses about how the SQL query used in the login is going to look like.
         A naive developer may have written something like:
     </p>
     <pre><code>SELECT * FROM User WHERE name = "{username}" AND password = "{password}"</code></pre>
@@ -266,7 +264,7 @@
         Now, consider <strong>A = B or 1 = 1</strong>.
         This whole expression will always be true, regardless of whatever A and B are.
     </p>
-    <p>How can we use this to get around the password check?</p> 
+    <p>How can we use this to bypass the password check?</p> 
     <table>
         <tr>
             <td>[1]</td>
@@ -282,7 +280,7 @@
     </p>
     <pre><code class="sql">" OR "1"="1</code></pre>
     <p> To get the final login query:</p>
-    <pre><code>SELECT * FROM User WHERE username = "Alice" AND password = "" OR "1"="1"</code></pre>
+    <pre><code>SELECT * FROM User WHERE name = "Alice" AND password = "" OR "1"="1"</code></pre>
     <p>
         We've strategically added double quotes so that they align properly with the double quotes surrounding the password input.
         You can try omitting them, and see that you will get an invalid SQL query.
