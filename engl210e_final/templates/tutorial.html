@@ -249,26 +249,104 @@
 </div>
 <div>
     <h3>Second Attack - 1=1: Introduction</h3>
+    <p>Remember what the login query looks like:</p>
     <p>
-       todo 
+        <strong>SELECT * FROM User WHERE name = "{username}" AND password = "{password}"</strong>
     </p>
+    <p>
+        There is a second attack that takes advantage of the conditionals in the query.
+        Specifically, consider <strong>password = "{password}"</strong>. 
+    </p>
+    <p>
+        It will help to clarify the use of <strong>AND</strong> and <strong>OR</strong> in SQL.
+        For <strong>AND</strong>, the condition on the left and the right must be true for the whole expression to be true.
+        For <strong>OR</strong>, only one of the two conditions must be true.
+    </p>
+    <p>
+        In SQL, <strong>A = B</strong> is true if, well, A is equal to B.
+        For example, <strong>1 = 1</strong> will always be true [1]. 
+        Now, consider <strong>A = B or 1 = 1</strong>.
+        This whole expression will always be true, regardless of whatever A and B are.
+    </p>
+    <p>How can we use this to get around the password check?</p> 
+    <table>
+        <tr>
+            <td>[1]</td>
+            <td>“SQL injection.” https://www.w3schools.com/sql/sql_injection.asp</td>
+        </tr>
+    </table>
 </div>
 <div>
     <h3>Second Attack - 1=1: Solution</h3>
     <p>
-        todo
+        If we can make our login query look like <strong>password = "{password}" OR 1=1</strong>, we can bypass the password check!
+        We can achieve this with the following password input:
     </p>
+    <p><strong>" OR "1"="1</strong></p>
+    <p> To get the final login query:</p>
+    <p><strong>SELECT * FROM User WHERE username = "Alice" AND password = "" OR "1"="1"</strong></p>
+    <p>
+        We've strategically added double quotes so that they align properly with the double quotes surrounding the password input.
+        You can try omitting them, and see that you will get an invalid SQL query.
+        As well, you can replace the 1's with any set of characters that you like!
+    </p>
+    <p>Give it a try!</p>
+    <p><strong>Username: </strong><input id="u2" type="text" value='Alice' disabled><button onclick="copy('u2')">Copy</button></p>
+    <p><strong>Password: </strong><input id="p1" type="text" value='" OR "1"="1' disabled><button onclick="copy('p1')">Copy</button></p>
 </div>
 <div>
     <h3>How to mitigate?</h3>
     <p>
-        todo
+        We have exploited the same insecure login screen in two completely different ways.
+        It could have been even worse, however.
+        It would be easy for us to inject entire instructions using this input, and with that, we could delete the entire database!
+        We are saved by the fact that this database input only performs the first instruction given, and ignores the rest.
     </p>
+    <p>
+        So how can we prevent this from happening?
+        The most important lesson is <strong>never trust user input</strong> [1]. 
+        If we had followed this principle, we would have <strong>sanitized</strong> the input (remove bad keywords, like SQL commands).
+        That way, these queries only come from us, and NEVER from the user.
+    </p>
+    <table>
+        <tr>
+            <td>[1]</td>
+            <td>C. Cairns, “The basics of web application Security,” martinfowler.com. https://martinfowler.com/articles/web-security-basics.html</td>
+        </tr>
+    </table>
 </div>
 <div>
     <h3>Thanks!</h3>
     <p>
-        todo
+        I hope you enjoyed this workshop!
+        Now, what can you do with this knowledge?
+        How can you make yourself safer on the web?
+    </p>
+    <p>
+        First, I strongly recommend investing in a <a href="https://en.wikipedia.org/wiki/Password_manager">password manager</a>.
+        Many people have a bad habit of using the same or similar passwords for every account.
+        Password managers make it easier to have strong and unique passwords for every login.
+        If your password is exposed in a data breach, you only have to replace the one instead of all of them.
+    </p>
+    <p>
+        Second, consider using <a href="https://en.wikipedia.org/wiki/Open-source_software">open-source software</a> when possible.
+        This type of software has its source code open to the public.
+        In practice, this means that bugs and vulnerabilities are spotted and fixed much faster than in traditional closed-source software.
+    </p>
+    <p>
+        I take the intersection of the two and use an open-source password manager called <a href="https://bitwarden.com/">Bitwarden</a>.
+    </p>
+    <p>
+        If you want to write software, be sure to pay attention in your security classes!
+        You should also become familiar with other common web vulnerabilities.
+        The <a href="https://owasp.org/www-project-top-ten/">OWASP Top 10</a> is a collection of the most critical vulnerabilities in software today.
+        You're already familiar with #3, those being injection attacks!
+    </p>
+    <p>
+        Have a great day and stay safe out there!
+    </p>
+    <p>
+        - Sashco
     </p>
 </div>
 {% endblock %}
