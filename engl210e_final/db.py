@@ -64,7 +64,8 @@ def init_token_db():
     with current_app.open_resource('tokens.json') as f:
         tokens = json.load(f)
         for t in tokens:
-            hashed_token = generate_password_hash(t) 
+            # this might be because werkzeug is newer on pythonanywhere
+            hashed_token = generate_password_hash(t, method="pbkdf2") 
             db.execute(f'insert into Tokens (token) values ("{hashed_token}")')
 
     db.commit()
