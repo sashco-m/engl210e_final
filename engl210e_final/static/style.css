@@ -35,14 +35,6 @@
     gap: 1rem;
 }
 
-.sql-keyword {
-    color: #EF6461;
-}
-
-.sql-string {
-    color: #3DDC97;
-}
-
 p {
     font-size: 1em;
     line-height: calc(1ex / 0.32);
@@ -60,6 +52,10 @@ table {
     display: flex;
     flex-direction: column;
     gap: 10px;
+}
+
+.hljs {
+    font-size: 1rem;
 }
 
 /* default */

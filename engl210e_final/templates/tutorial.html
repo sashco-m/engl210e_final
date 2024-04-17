@@ -148,9 +148,7 @@
         Suppose we only want rows where the "username" column has the value "Alice". 
         Then our instruction becomes:
     </p>
-    <p>
-        <strong>SELECT * FROM User WHERE username = "Alice"</strong>
-    </p>
+    <pre><code>SELECT * FROM User WHERE username = "Alice"</code></pre>
     <p> 
         Of course, other keywords like <strong>DELETE</strong> or <strong>UPDATE</strong> follow the same pattern.
     </p>
@@ -201,9 +199,7 @@
         Well, as an attacker, we can make some guesses about how this SQL query used in the login is going to look like.
         A naive developer may have written something like:
     </p>
-    <p>
-        <strong>SELECT * FROM User WHERE name = "{username}" AND password = "{password}"</strong>
-    </p>
+    <pre><code>SELECT * FROM User WHERE name = "{username}" AND password = "{password}"</code></pre>
     <p>
         Where {username} and {password} come directly from the input on the right.
         If the database returns a row, the webserver knows that username/password combination exists and it can consider that user logged in.
@@ -220,11 +216,11 @@
         Well, we want to access Alice's account.
         However, what if we set the username as:
     </p>    
-    <p><strong>Alice" --</strong></p>
+    <pre><code class="sql">Alice" --</code></pre>
     <p>
         The resulting query looks like:
     </p>
-    <p><strong>SELECT * FROM User WHERE name = "Alice" --" AND password = "{password}";</strong></p>
+    <pre><code>SELECT * FROM User WHERE name = "Alice" --" AND password = "{password}"</code></pre>
     <p>
         Remember: we ignore everything after the --.
         So, this simply selects and row with the name Alice, regardless of the password [1]!
@@ -250,9 +246,7 @@
 <div>
     <h3>Second Attack - 1=1: Introduction</h3>
     <p>Remember what the login query looks like:</p>
-    <p>
-        <strong>SELECT * FROM User WHERE name = "{username}" AND password = "{password}"</strong>
-    </p>
+    <pre><code>SELECT * FROM User WHERE name = "{username}" AND password = "{password}"</code></pre>
     <p>
         There is a second attack that takes advantage of the conditionals in the query.
         Specifically, consider <strong>password = "{password}"</strong>. 
@@ -282,9 +276,9 @@
         If we can make our login query look like <strong>password = "{password}" OR 1=1</strong>, we can bypass the password check!
         We can achieve this with the following password input:
     </p>
-    <p><strong>" OR "1"="1</strong></p>
+    <pre><code class="sql">" OR "1"="1</code></pre>
     <p> To get the final login query:</p>
-    <p><strong>SELECT * FROM User WHERE username = "Alice" AND password = "" OR "1"="1"</strong></p>
+    <pre><code>SELECT * FROM User WHERE username = "Alice" AND password = "" OR "1"="1"</code></pre>
     <p>
         We've strategically added double quotes so that they align properly with the double quotes surrounding the password input.
         You can try omitting them, and see that you will get an invalid SQL query.
